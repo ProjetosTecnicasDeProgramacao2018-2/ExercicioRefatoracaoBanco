@@ -1,19 +1,20 @@
 package com.bcopstein.ExercicioRefatoracaoBanco;
+
 public class Operacao {
 	public final int CREDITO = 0;
 	public final int DEBITO = 1;
-    
+
 	private int dia;
-    private int mes;
-    private int ano;
-    private int hora;
-    private int minuto;
-    private int segundo;
-    private int numeroConta;
-    private int statusConta;
-    private double valorOperacao;
-    private int tipoOperacao;
-    
+	private int mes;
+	private int ano;
+	private int hora;
+	private int minuto;
+	private int segundo;
+	private int numeroConta;
+	private int statusConta;
+	private double valorOperacao;
+	private int tipoOperacao;
+
 	public Operacao(int dia, int mes, int ano, int hora, int minuto, int segundo, int numeroConta, int statusConta,
 			double valorOperacao, int tipoOperacao) {
 		super();
@@ -68,19 +69,15 @@ public class Operacao {
 	public int getTipoOperacao() {
 		return tipoOperacao;
 	}
-    
+
 	@Override
 	public String toString() {
 		String tipo = "<C>";
 		if (tipoOperacao == 1) {
-			tipo = "<D>"; 
+			tipo = "<D>";
 		}
-		String line = dia+"/"+mes+"/"+ano+" "+
-	                  hora+":"+minuto+":"+segundo+" "+
-				      numeroConta+" "+
-	                  statusConta +" "+
-				      tipo+" "+
-	                  valorOperacao;
-		return(line);
+		String line = dia + "/" + mes + "/" + ano + " " + hora + ":" + minuto + ":" + segundo + " " + numeroConta + " "
+				+ statusConta + " " + tipo + " " + valorOperacao;
+		return (line);
 	}
 }

@@ -32,12 +32,17 @@ public class TelaOperacoes {
 
 	private TextField tfValorOperacao;
 	private TextField tfSaldo;
-
+	
+	//feito
+	private Label lbCategoria;
+	
 	public TelaOperacoes(Stage mainStage, Scene telaEntrada, Conta conta, List<Operacao> operacoes) { // Tirar esse parâmetro																					// conta
 		this.mainStage = mainStage;
 		this.cenaEntrada = telaEntrada;
 		this.conta = conta;
 		this.operacoes = operacoes;
+		
+		this.lbCategoria = null;
 	}
 
 	public Scene getTelaOperacoes() {
@@ -52,11 +57,13 @@ public class TelaOperacoes {
         scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
         grid.add(scenetitle, 0, 0, 2, 1);
         
-        String categoria = "Categoria: "+conta.getStrStatus();
         String limRetDiaria = "Limite retirada diaria: "+conta.getLimRetiradaDiaria();
         
-        Label cat = new Label(categoria);
-        grid.add(cat, 0, 1);
+        HBox hbCategoria = new HBox(20);    
+        this.lbCategoria = new Label(conta.getStrStatus());
+        hbCategoria.getChildren().add(new Label("Categoria: "));
+        hbCategoria.getChildren().add(this.lbCategoria);
+        grid.add(hbCategoria, 0, 1);
 
         Label lim = new Label(limRetDiaria);
         grid.add(lim, 0, 2);
@@ -110,10 +117,11 @@ public class TelaOperacoes {
         		  throw new NumberFormatException("Valor invalido");
         	  }
         	  conta.deposito(valor);
-        	  GregorianCalendar date = new GregorianCalendar();
+        	  GregorianCalendar date = new GregorianCalendar();        	  
+        	  
         	  Operacao op = new Operacao(
         			  date.get(GregorianCalendar.DAY_OF_MONTH),
-        			  date.get(GregorianCalendar.MONTH+1),
+        			  ((int) date.get(GregorianCalendar.MONTH)+1),
         			  date.get(GregorianCalendar.YEAR),
         			  date.get(GregorianCalendar.HOUR),
         			  date.get(GregorianCalendar.MINUTE),
@@ -124,6 +132,7 @@ public class TelaOperacoes {
         			  0);
               operacoes.add(op);        	  
         	  tfSaldo.setText(""+conta.getSaldo());
+        	  this.lbCategoria.setText("Categoria: "+conta.getStrStatus());  //ATUALIZA A CATEGORIA
         	  operacoesConta.add(op);
         	}catch(NumberFormatException ex) {
 				Alert alert = new Alert(AlertType.WARNING);
@@ -159,6 +168,8 @@ public class TelaOperacoes {
         	  tfSaldo.setText(""+conta.getSaldo());
         	  operacoesConta.add(op);
           	  tfSaldo.setText(""+conta.getSaldo());
+          	  
+          	  this.lbCategoria.setText("Categoria: "+conta.getStrStatus()); //ATUALIZA A CATEGORIA
           	}catch(NumberFormatException ex) {
   				Alert alert = new Alert(AlertType.WARNING);
   				alert.setTitle("Valor inválido !!");
