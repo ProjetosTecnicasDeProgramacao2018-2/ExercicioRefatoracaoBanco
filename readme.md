@@ -22,7 +22,7 @@ As contas desse banco tem um comportamento específico. Quanto mais dinheiro o c
 
 Quando o saldo da conta diminui, em função de uma operação de retirada/saque, a categoria também pode retroceder. Os limites, porém, não são os mesmos ao verificados quando uma conta sofre “upgrade”. Uma conta só perde sua categoria “Platinum”, e passa para “Gold”, se o saldo cair abaixo de R$ 100.000,00. A conta só perde a categoria “Gold”, e passa para “Silver”, se o saldo cair para menos de R$ 25.000,00. Note que uma conta nunca perde duas categorias em uma única operação de retirada mesmo que o saldo caia abaixo de R$ 25.000,00. Se ele era “Platinum”, cai para “Gold”. Só poderá cair para “Silver” na próxima operação de retirada. Observação: as contas nunca podem ficar negativas (o banco não trabalha com cheque especial).
 
-ATENCAO: contas Silver possuem um limite diário de R$ 10000,00 para saques; contas Gold possuem um limite diário de R$ 100000,00 para saques; contas Platinum possuem um limite diário de 500000,00 para saques. <<< ESTAS RESTRIÇÕES AINDA NÃO ESTÃO IMPLEMENTADAS !!
+ATENCAO: contas Silver possuem um limite diário de R$ 10000,00 para saques; contas Gold possuem um limite diário de R$ 100000,00 para saques; contas Platinum possuem um limite diário de 500000,00 para saques. <<< ESTAS RESTRIÇÕES AINDA NÃO ESTÃO IMPLEMENTADAS !! (FEITO)
 
 Para efeitos de armazenamento no arquivo a categoria “Silver” é identificada com o número “0”, a categoria “Gold” com o número “1” e a categoria “Platinum” com o número “2”.
 
