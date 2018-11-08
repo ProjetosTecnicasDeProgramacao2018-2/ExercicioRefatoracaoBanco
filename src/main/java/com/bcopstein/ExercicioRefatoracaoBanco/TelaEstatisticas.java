@@ -1,5 +1,7 @@
 package com.bcopstein.ExercicioRefatoracaoBanco;
 
+import javafx.scene.control.TextField;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -9,21 +11,24 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.scene.layout.HBox;
 
 public class TelaEstatisticas {
 	private Stage mainStage; 
 	private Scene cenaEstatisticas;
 
+	private TextField tfMes;
+	private TextField tfAno;
+	
 	public TelaEstatisticas(Stage mainStage) {
 		this.mainStage = mainStage;
 		this.cenaEstatisticas = null;
 	}
 
 	public Scene getTelaEstatisticas() {
-		// ------------------- INICIO PAINEL GERAL ------------------------
+		// ------------------- INICIO PAINEL GERAL ------------------------ 
 		// OBS: PODE VIRAR UM MÉTODO DE UMA CLASSE PAI
 		GridPane grid = new GridPane();
-		grid.setAlignment(Pos.CENTER);
 		grid.setMinWidth(500);
 		grid.setHgap(10);
 		grid.setVgap(10);
@@ -41,8 +46,15 @@ public class TelaEstatisticas {
 		form.setPadding(new Insets(0, 0, 0, 0));
 		
 		Label tituloForm = new Label("Pesquise as estatísticas da sua conta:");
-		form.add(tituloForm, 0, 0);
 		
+		HBox hbData = new HBox();
+		this.tfMes = new TextField();
+		this.tfAno = new TextField();
+		hbData.getChildren().add(this.tfMes);
+		hbData.getChildren().add(this.tfAno);
+		
+		form.add(tituloForm, 0, 0);
+		form.add(hbData, 0, 1);
 		
 		// -------------- FINAL FORMULARIO --------------
 		
