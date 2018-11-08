@@ -25,6 +25,7 @@ public class TelaOperacoes {
 	private Stage mainStage; 
 	private Scene cenaEntrada;
 	private Scene cenaOperacoes;
+	private Scene cenaEstatisticas;
 	private List<Operacao> operacoes;
 	private ObservableList<Operacao> operacoesConta;
 
@@ -36,12 +37,13 @@ public class TelaOperacoes {
 	//feito
 	private Label lbCategoria;
 	
-	public TelaOperacoes(Stage mainStage, Scene telaEntrada, Conta conta, List<Operacao> operacoes) { // Tirar esse parâmetro																					// conta
+	public TelaOperacoes(Stage mainStage, Scene telaEntrada, Scene telaEstatisticas, Conta conta, List<Operacao> operacoes) { // Tirar esse parâmetro																					// conta
 		this.mainStage = mainStage;
 		this.cenaEntrada = telaEntrada;
 		this.conta = conta;
 		this.operacoes = operacoes;
 		
+		this.cenaEstatisticas = telaEstatisticas;
 		this.lbCategoria = null;
 	}
 
@@ -103,11 +105,13 @@ public class TelaOperacoes {
         Button btnCredito = new Button("Credito");
         Button btnDebito = new Button("Debito");
         Button btnVoltar = new Button("Voltar");
+        Button btnEstatisticas = new Button("Estatisticas");
         HBox hbBtn = new HBox(20);
         hbBtn.setAlignment(Pos.TOP_CENTER);
         hbBtn.getChildren().add(btnCredito);
         hbBtn.getChildren().add(btnDebito);
         hbBtn.getChildren().add(btnVoltar);
+        hbBtn.getChildren().add(btnEstatisticas);
         grid.add(hbBtn, 1, 2);
         
         btnCredito.setOnAction(e->{
@@ -182,6 +186,9 @@ public class TelaOperacoes {
 
         btnVoltar.setOnAction(e->{
         	mainStage.setScene(cenaEntrada);
+        });
+        btnEstatisticas.setOnAction(e->{
+        	mainStage.setScene(this.cenaEstatisticas);
         });
 		
         cenaOperacoes = new Scene(grid);

@@ -23,6 +23,7 @@ import javafx.stage.Stage;
 public class TelaEntrada {
 	private Stage mainStage; 
 	private Scene cenaEntrada; 
+	private Scene cenaEstatisticas;
 	private Map<Integer, Conta> contas; 
 	private List<Operacao> operacoes; 
 
@@ -79,7 +80,7 @@ public class TelaEntrada {
 					throw new NumberFormatException("Conta invalida");
 				}
 				// Transformar o parâmetro "conta" na conta atual na camada de negócio
-				TelaOperacoes toper = new TelaOperacoes(mainStage, cenaEntrada,conta,operacoes);
+				TelaOperacoes toper = new TelaOperacoes(mainStage, cenaEntrada, new TelaEstatisticas(mainStage).getTelaEstatisticas(),conta,operacoes);
 				Scene scene = toper.getTelaOperacoes();
 				mainStage.setScene(scene);
 			} catch (NumberFormatException ex) {

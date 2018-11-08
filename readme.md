@@ -12,7 +12,7 @@ O módulo de acesso a conta corrente é um módulo simples que deve permitir ao 
 O sistema é composto por tres telas:
 * Tela de identificação da conta corrente: nesta tela o usuário informa o número da conta corrente que deseja acessar.
 
-* Tela de operações: nesta tela o usuário visualiza o saldo, a categoria da conta, o limite diário para saque e os últimos movimentos da conta informada e pode executar operações de depósito e retirada. << BUGFIX: ajustar a categoria da conta quando ela muda !!
+* Tela de operações: nesta tela o usuário visualiza o saldo, a categoria da conta, o limite diário para saque e os últimos movimentos da conta informada e pode executar operações de depósito e retirada. << BUGFIX: ajustar a categoria da conta quando ela muda !! (FEITO)
 
 * Tela de estatísticas: nesta tela o usuário visualiza informações gerais sobre a conta tais como: saldo médio no mês/ano indicados; total e quantidade de créditos no mês ano indicados; total e quantidade de débitos no mês ano indicados. O usuário tem acesso a tela de estatisticas a partir da tela de operacoes  << ESTA TELA AINDA NÃO ESTA IMPLEMENTADA !!
 
