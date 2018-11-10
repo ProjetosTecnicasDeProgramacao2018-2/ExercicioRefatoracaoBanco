@@ -73,7 +73,7 @@ public class Operacao {
 	@Override
 	public String toString() {
 		String tipo = "<C>";
-		if (tipoOperacao == 1) {
+		if (tipoOperacao == DEBITO) {
 			tipo = "<D>";
 		}
 		String line = dia + "/" + mes + "/" + ano + " " + hora + ":" + minuto + ":" + segundo + " " + numeroConta + " "

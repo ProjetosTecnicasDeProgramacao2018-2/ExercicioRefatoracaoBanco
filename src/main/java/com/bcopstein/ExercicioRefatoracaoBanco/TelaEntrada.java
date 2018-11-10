@@ -80,7 +80,7 @@ public class TelaEntrada {
 					throw new NumberFormatException("Conta invalida");
 				}
 				// Transformar o parâmetro "conta" na conta atual na camada de negócio
-				TelaOperacoes toper = new TelaOperacoes(mainStage, cenaEntrada, new TelaEstatisticas(mainStage).getTelaEstatisticas(),conta,operacoes);
+				TelaOperacoes toper = new TelaOperacoes(mainStage, cenaEntrada, new TelaEstatisticas(mainStage, operacoes).getTelaEstatisticas(),conta,operacoes);
 				Scene scene = toper.getTelaOperacoes();
 				mainStage.setScene(scene);
 			} catch (NumberFormatException ex) {
