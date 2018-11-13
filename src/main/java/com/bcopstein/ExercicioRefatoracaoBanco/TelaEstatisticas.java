@@ -5,6 +5,8 @@ import javafx.scene.control.TextField;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.bcopstein.ExercicioRefatoracaoBanco.Negocio.Operacao;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -32,7 +34,9 @@ public class TelaEstatisticas {
 	private TextField tfTotalDeDebitos;
 	private TextField tfQuantidadeDeDebitos;
 	
-	public TelaEstatisticas(Stage mainStage, List<Operacao> operacoes) {
+	private static TelaEstatisticas instance; //SINGLETON
+	
+	private TelaEstatisticas() {
 		this.mainStage = mainStage;
 		this.cenaEstatisticas = null;
 		this.tfSaldoMedio = new TextField();
@@ -41,7 +45,18 @@ public class TelaEstatisticas {
 		this.tfTotalDeDebitos = new TextField();
 		this.tfQuantidadeDeDebitos = new TextField();
 		
-		this.operacoes = operacoes;
+		//this.operacoes = operacoes;
+	}
+	
+	public static TelaEstatisticas getInstance() {
+		if(instance == null) {
+			instance = new TelaEstatisticas();
+		}
+		return instance;
+	}
+	
+	public void setStage(Stage stage) {
+		this.mainStage = stage;
 	}
 
 	public Scene getTelaEstatisticas() {

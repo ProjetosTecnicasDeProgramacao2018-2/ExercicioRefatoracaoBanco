@@ -2,6 +2,10 @@ package com.bcopstein.ExercicioRefatoracaoBanco;
 import java.util.List;
 import java.util.Map;
 
+import com.bcopstein.ExercicioRefatoracaoBanco.Negocio.Conta;
+import com.bcopstein.ExercicioRefatoracaoBanco.Negocio.LogicaOperacoes;
+import com.bcopstein.ExercicioRefatoracaoBanco.Negocio.Operacao;
+
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -26,13 +30,24 @@ public class TelaEntrada {
 	private Scene cenaEstatisticas;
 	private Map<Integer, Conta> contas; 
 	private List<Operacao> operacoes; 
+	
+	private static TelaEntrada instance; //SINGLETON
 
 	private TextField tfContaCorrente;
 
-	public TelaEntrada(Stage anStage, Map<Integer, Conta> lstContas, List<Operacao> operacoes) {
-		mainStage = anStage;
-		contas = lstContas;
-		this.operacoes = operacoes;
+	private TelaEntrada() {
+		//mainStage = anStage;
+	}
+	
+	public static TelaEntrada getInstance() {
+		if(instance == null) {
+			instance = new TelaEntrada();
+		}
+		return instance;
+	}
+	
+	public void setStage(Stage stage) {
+		this.mainStage = stage;
 	}
 
 	public Scene getTelaEntrada() {
@@ -80,9 +95,12 @@ public class TelaEntrada {
 					throw new NumberFormatException("Conta invalida");
 				}
 				// Transformar o parâmetro "conta" na conta atual na camada de negócio
-				TelaOperacoes toper = new TelaOperacoes(mainStage, cenaEntrada, new TelaEstatisticas(mainStage, operacoes).getTelaEstatisticas(),conta,operacoes);
-				Scene scene = toper.getTelaOperacoes();
-				mainStage.setScene(scene);
+				//TelaOperacoes toper = new TelaOperacoes(mainStage, cenaEntrada, new TelaEstatisticas(mainStage, operacoes).getTelaEstatisticas(),conta,operacoes);
+				//Scene scene = toper.getTelaOperacoes();
+				
+				// MUDA A CENA PARA A DA TELA DE OPERAÇÕES
+				mainStage.setScene(TelaOperacoes.getInstance().getTelaOperacoes());
+				
 			} catch (NumberFormatException ex) {
 				Alert alert = new Alert(AlertType.WARNING);
 				alert.setTitle("Conta inválida !!");

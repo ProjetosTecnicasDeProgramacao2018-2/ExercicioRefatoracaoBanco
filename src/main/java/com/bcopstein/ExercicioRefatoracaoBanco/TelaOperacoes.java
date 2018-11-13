@@ -3,6 +3,9 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.bcopstein.ExercicioRefatoracaoBanco.Negocio.Conta;
+import com.bcopstein.ExercicioRefatoracaoBanco.Negocio.Operacao;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -28,6 +31,8 @@ public class TelaOperacoes {
 	private Scene cenaEstatisticas;
 	private List<Operacao> operacoes;
 	private ObservableList<Operacao> operacoesConta;
+	
+	private static TelaOperacoes instance; //SINGLETON
 
 	private Conta conta; 
 
@@ -37,14 +42,25 @@ public class TelaOperacoes {
 	//feito
 	private Label lbCategoria;
 	
-	public TelaOperacoes(Stage mainStage, Scene telaEntrada, Scene telaEstatisticas, Conta conta, List<Operacao> operacoes) { // Tirar esse parâmetro																					// conta
-		this.mainStage = mainStage;
-		this.cenaEntrada = telaEntrada;
-		this.conta = conta;
-		this.operacoes = operacoes;
+	private TelaOperacoes() {
+		//this.mainStage = mainStage;
+		this.cenaEntrada = TelaEntrada.getInstance().getTelaEntrada();
+		this.cenaEstatisticas = TelaEstatisticas.getInstance().getTelaEstatisticas();
 		
-		this.cenaEstatisticas = telaEstatisticas;
+//		this.conta = conta;
+//		this.operacoes = operacoes;
+		
 		this.lbCategoria = null;
+	}
+	
+	public static TelaOperacoes getInstance() {
+		if(instance == null) {
+			instance = new TelaOperacoes();
+		}
+		return instance;
+	}
+	public void setStage(Stage stage) {
+		this.mainStage = stage;
 	}
 
 	public Scene getTelaOperacoes() {

@@ -2,6 +2,10 @@ package com.bcopstein.ExercicioRefatoracaoBanco;
 import java.util.List;
 import java.util.Map;
 
+import com.bcopstein.ExercicioRefatoracaoBanco.Negocio.Conta;
+import com.bcopstein.ExercicioRefatoracaoBanco.Negocio.Operacao;
+import com.bcopstein.ExercicioRefatoracaoBanco.Persistencia.Persistencia;
+
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -29,16 +33,23 @@ public class App extends Application {
 	
     @Override
     public void start(Stage primaryStage) {
-    	persistencia = new Persistencia();
-        contas = persistencia.loadContas();    	
-    	operacoes = persistencia.loadOperacoes();
+    	this.setStages(primaryStage);
+    	
+//    	persistencia = new Persistencia();
+//      contas = persistencia.loadContas();    	
+//    	operacoes = persistencia.loadOperacoes();
     	
     	primaryStage.setTitle("$$ Banco NOSSA GRANA $$");
 
-    	telaEntrada = new TelaEntrada(primaryStage, contas, operacoes); // << Substituir por singleton
-
-        primaryStage.setScene(telaEntrada.getTelaEntrada());
+        primaryStage.setScene(TelaEntrada.getInstance().getTelaEntrada());
+        
         primaryStage.show();
+    }
+    
+    private void setStages(Stage stage) {
+    	TelaEntrada.getInstance().setStage(stage);
+    	TelaEstatisticas.getInstance().setStage(stage);
+    	TelaOperacoes.getInstance().setStage(stage);
     }
     
     @Override

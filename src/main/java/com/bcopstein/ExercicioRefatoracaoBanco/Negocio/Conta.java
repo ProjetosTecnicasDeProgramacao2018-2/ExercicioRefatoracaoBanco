@@ -1,4 +1,4 @@
-package com.bcopstein.ExercicioRefatoracaoBanco;
+package com.bcopstein.ExercicioRefatoracaoBanco.Negocio;
 public class Conta {
 	public final int SILVER = 0;
 	public final int GOLD = 1;
