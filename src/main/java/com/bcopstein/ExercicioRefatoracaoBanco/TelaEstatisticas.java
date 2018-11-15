@@ -5,6 +5,7 @@ import javafx.scene.control.TextField;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.bcopstein.ExercicioRefatoracaoBanco.Negocio.LogicaOperacoes;
 import com.bcopstein.ExercicioRefatoracaoBanco.Negocio.Operacao;
 
 import javafx.geometry.Insets;
@@ -23,8 +24,6 @@ public class TelaEstatisticas {
 	private Stage mainStage; 
 	private Scene cenaEstatisticas;
 	
-	private List<Operacao> operacoes;
-
 	private TextField tfMes;
 	private TextField tfAno;
 
@@ -123,10 +122,18 @@ public class TelaEstatisticas {
 		// -------------- FINAL RESULTADO --------------
 		// ------------------- FINAL PAINEL GERAL ------------------------
 		
+		// ------------------- INICIO FOOTER ------------------------
+		Button botaoVoltar = new Button("Voltar");
+		
+		botaoVoltar.setOnAction(e->{
+			this.mainStage.setScene(TelaOperacoes.getInstance().getTelaOperacoes());
+		});
+		// ------------------- FINAL FOOTER ------------------------
 		 
 		grid.add(scenetitle, 0, 0);
 		grid.add(form, 0, 1);
 		grid.add(gridResultado, 0, 2);
+		grid.add(botaoVoltar, 0, 3);
 		
 		this.cenaEstatisticas = new Scene(grid);
 		
@@ -142,39 +149,18 @@ public class TelaEstatisticas {
 	}
 
 	private void carregaResultados() {
-		List<Operacao> lista = this.retornaOperacoesDoMesAno(Integer.parseInt(this.tfMes.getText()), Integer.parseInt(this.tfAno.getText()));
-
-		double saldoMedio = 0;
-		double totalCreditos = 0;
-		double totalDebitos = 0;
-		int qtdCreditos = 0;
-		int qtdDebitos = 0;
+		LogicaOperacoes logicaOp = LogicaOperacoes.getInstance();
 		
-		for( Operacao op : lista ) {			
-			saldoMedio += op.getValorOperacao();
-			
-			if(op.getTipoOperacao() == op.CREDITO) {
-				totalCreditos += op.getValorOperacao();
-				qtdCreditos++;
-			}else if(op.getTipoOperacao() == op.DEBITO) {
-				totalDebitos += op.getValorOperacao();
-				qtdDebitos++;
-			}
-		}
-		saldoMedio = !lista.isEmpty() ? saldoMedio / lista.size() : 0;
+		int mes = Integer.parseInt(this.tfMes.getText());
+		int ano = Integer.parseInt(this.tfAno.getText());
 		
-		this.tfSaldoMedio.setText(saldoMedio+"");
-		this.tfTotalDeCreditos.setText(totalCreditos+"");
-		this.tfQuantidadeDeCreditos.setText(qtdCreditos+"");
-		this.tfTotalDeDebitos.setText(totalDebitos+"");
-		this.tfQuantidadeDeDebitos.setText(qtdDebitos+"");
+		this.tfSaldoMedio.setText(logicaOp.saldoMedio(mes, ano)+"");
+		this.tfTotalDeCreditos.setText(logicaOp.totalCreditos(mes, ano)+"");
+		this.tfQuantidadeDeCreditos.setText(logicaOp.qtdCreditos(mes, ano)+"");
+		this.tfTotalDeDebitos.setText(logicaOp.totalDebitos(mes, ano)+"");
+		this.tfQuantidadeDeDebitos.setText(logicaOp.qtdDebitos(mes, ano)+"");
 	}
 	
-	private List<Operacao> retornaOperacoesDoMesAno(int mes, int ano){
-		return this.operacoes
-				.stream()
-				.filter( (e) -> e.getAno() == ano && e.getMes() == mes )
-				.collect(Collectors.toList());
-	}
+	
 }
 

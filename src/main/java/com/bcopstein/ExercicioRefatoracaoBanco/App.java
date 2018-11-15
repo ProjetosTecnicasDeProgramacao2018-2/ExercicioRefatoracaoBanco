@@ -3,6 +3,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.bcopstein.ExercicioRefatoracaoBanco.Negocio.Conta;
+import com.bcopstein.ExercicioRefatoracaoBanco.Negocio.LogicaOperacoes;
 import com.bcopstein.ExercicioRefatoracaoBanco.Negocio.Operacao;
 import com.bcopstein.ExercicioRefatoracaoBanco.Persistencia.Persistencia;
 
@@ -25,19 +26,11 @@ import javafx.stage.Stage;
 
 
 public class App extends Application {
-	private Persistencia persistencia;
-	private Map<Integer,Conta> contas;
-	private List<Operacao> operacoes;
-	
 	private TelaEntrada telaEntrada;
 	
     @Override
     public void start(Stage primaryStage) {
     	this.setStages(primaryStage);
-    	
-//    	persistencia = new Persistencia();
-//      contas = persistencia.loadContas();    	
-//    	operacoes = persistencia.loadOperacoes();
     	
     	primaryStage.setTitle("$$ Banco NOSSA GRANA $$");
 
@@ -54,8 +47,7 @@ public class App extends Application {
     
     @Override
     public void stop() {
-        persistencia.saveContas(contas.values());
-        persistencia.saveOperacoes(operacoes);
+        LogicaOperacoes.getInstance().stop();
     }
     
     public static void main(String[] args) {

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.bcopstein.ExercicioRefatoracaoBanco.Negocio.Conta;
+import com.bcopstein.ExercicioRefatoracaoBanco.Negocio.LogicaOperacoes;
 import com.bcopstein.ExercicioRefatoracaoBanco.Negocio.Operacao;
 
 import javafx.collections.FXCollections;
@@ -26,31 +27,14 @@ import javafx.stage.Stage;
 
 public class TelaOperacoes {
 	private Stage mainStage; 
-	private Scene cenaEntrada;
 	private Scene cenaOperacoes;
-	private Scene cenaEstatisticas;
-	private List<Operacao> operacoes;
-	private ObservableList<Operacao> operacoesConta;
-	
-	private static TelaOperacoes instance; //SINGLETON
-
-	private Conta conta; 
-
 	private TextField tfValorOperacao;
 	private TextField tfSaldo;
-	
-	//feito
+	private ListView<Operacao> extrato;
 	private Label lbCategoria;
+	private static TelaOperacoes instance; //SINGLETON
 	
 	private TelaOperacoes() {
-		//this.mainStage = mainStage;
-		this.cenaEntrada = TelaEntrada.getInstance().getTelaEntrada();
-		this.cenaEstatisticas = TelaEstatisticas.getInstance().getTelaEstatisticas();
-		
-//		this.conta = conta;
-//		this.operacoes = operacoes;
-		
-		this.lbCategoria = null;
 	}
 	
 	public static TelaOperacoes getInstance() {
@@ -62,6 +46,13 @@ public class TelaOperacoes {
 	public void setStage(Stage stage) {
 		this.mainStage = stage;
 	}
+	
+	private void setResultadoOperacoes() {
+		LogicaOperacoes logicaOp = LogicaOperacoes.getInstance();
+		tfSaldo.setText(logicaOp.saldo());
+  	  	lbCategoria.setText(logicaOp.strStatus());  //ATUALIZA A CATEGORIA
+  	  	extrato.setItems(logicaOp.extratoObservable());
+	}
 
 	public Scene getTelaOperacoes() {
         GridPane grid = new GridPane();
@@ -70,19 +61,20 @@ public class TelaOperacoes {
         grid.setVgap(10);
         grid.setPadding(new Insets(25, 25, 25, 25));
 
-        String dadosCorr = conta.getNumero()+" : "+conta.getCorrentista();
-        Text scenetitle = new Text(dadosCorr);
+        // TITULO DA CENA
+        Text scenetitle = new Text(LogicaOperacoes.getInstance().tituloConta());
         scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
         grid.add(scenetitle, 0, 0, 2, 1);
         
-        String limRetDiaria = "Limite retirada diaria: "+conta.getLimRetiradaDiaria();
-        
+        // STATUS E CATEGORIA
         HBox hbCategoria = new HBox(20);    
-        this.lbCategoria = new Label(conta.getStrStatus());
+        this.lbCategoria = new Label(LogicaOperacoes.getInstance().strStatus());
         hbCategoria.getChildren().add(new Label("Categoria: "));
         hbCategoria.getChildren().add(this.lbCategoria);
         grid.add(hbCategoria, 0, 1);
 
+        // LIMITE DA RETIRADA DIARIA
+        String limRetDiaria = "Limite retirada diaria: "+LogicaOperacoes.getInstance().limiteRetiradaDiaria();
         Label lim = new Label(limRetDiaria);
         grid.add(lim, 0, 2);
         
@@ -90,21 +82,14 @@ public class TelaOperacoes {
         grid.add(tit,0,3);
 
         // Seleciona apenas o extrato da conta atual
-        operacoesConta = 
-        		FXCollections.observableArrayList(
-        				operacoes
-        				.stream()
-        				.filter(op -> op.getNumeroConta() == this.conta.getNumero())
-        				.collect(Collectors.toList())
-        				);
-        
-        ListView<Operacao> extrato = new ListView<>(operacoesConta);
+        extrato = new ListView<>(LogicaOperacoes.getInstance().extratoObservable());
         extrato.setPrefHeight(140);
+        
         grid.add(extrato, 0, 4);
 
         tfSaldo = new TextField();
         tfSaldo.setDisable(true);
-        tfSaldo.setText(""+conta.getSaldo());
+        tfSaldo.setText(LogicaOperacoes.getInstance().saldo());
         HBox valSaldo = new HBox(20);        
         valSaldo.setAlignment(Pos.BOTTOM_LEFT);
         valSaldo.getChildren().add(new Label("Saldo"));
@@ -132,83 +117,51 @@ public class TelaOperacoes {
         
         btnCredito.setOnAction(e->{
         	try {
-        	  double valor = Integer.parseInt(tfValorOperacao.getText());
-        	  if (valor < 0.0) {
-        		  throw new NumberFormatException("Valor invalido");
-        	  }
-        	  conta.deposito(valor);
-        	  GregorianCalendar date = new GregorianCalendar();        	  
-        	  
-        	  Operacao op = new Operacao(
-        			  date.get(GregorianCalendar.DAY_OF_MONTH),
-        			  ((int) date.get(GregorianCalendar.MONTH)+1),
-        			  date.get(GregorianCalendar.YEAR),
-        			  date.get(GregorianCalendar.HOUR),
-        			  date.get(GregorianCalendar.MINUTE),
-        			  date.get(GregorianCalendar.SECOND),
-        			  conta.getNumero(),
-        			  conta.getStatus(),
-        			  valor,
-        			  0);
-              operacoes.add(op);        	  
-        	  tfSaldo.setText(""+conta.getSaldo());
-        	  this.lbCategoria.setText("Categoria: "+conta.getStrStatus());  //ATUALIZA A CATEGORIA
-        	  operacoesConta.add(op);
-        	}catch(NumberFormatException ex) {
-				Alert alert = new Alert(AlertType.WARNING);
-				alert.setTitle("Valor inválido !!");
-				alert.setHeaderText(null);
-				alert.setContentText("Valor inválido para operacao de crédito!!");
-
-				alert.showAndWait();
-        	}        	
+	      	  	double valor = Integer.parseInt(tfValorOperacao.getText());
+	      	  
+	          	if(LogicaOperacoes.getInstance().credito(valor)) {
+	          	  	this.setResultadoOperacoes();
+	          	}else{
+	          		this.abreAlerta("Valor inválido !!", "Valor inválido para operacao de crédito!");
+	          	}    
+        	}catch(Exception ex) {
+        		this.abreAlerta("Valor inválido !!", "Valor inválido para operacao de crédito!");
+        	}
         });
         
         btnDebito.setOnAction(e->{
         	try {
-          	  double valor = Integer.parseInt(tfValorOperacao.getText());
-          	  if (valor < 0.0 || valor > conta.getSaldo()) {
-          		  throw new NumberFormatException("Saldo insuficiente");
-          	  }
-          	  conta.retirada(valor);
-        	  GregorianCalendar date = new GregorianCalendar();
-        	  Operacao op = new Operacao(
-        			  date.get(GregorianCalendar.DAY_OF_MONTH),
-        			  date.get(GregorianCalendar.MONTH+1),
-        			  date.get(GregorianCalendar.YEAR),
-        			  date.get(GregorianCalendar.HOUR),
-        			  date.get(GregorianCalendar.MINUTE),
-        			  date.get(GregorianCalendar.SECOND),
-        			  conta.getNumero(),
-        			  conta.getStatus(),
-        			  valor,
-        			  1);
-        	  // Esta adicionando em duas listas (resolver na camada de negocio)
-              operacoes.add(op);        	  
-        	  tfSaldo.setText(""+conta.getSaldo());
-        	  operacoesConta.add(op);
-          	  tfSaldo.setText(""+conta.getSaldo());
-          	  
-          	  this.lbCategoria.setText("Categoria: "+conta.getStrStatus()); //ATUALIZA A CATEGORIA
-          	}catch(NumberFormatException ex) {
-  				Alert alert = new Alert(AlertType.WARNING);
-  				alert.setTitle("Valor inválido !!");
-  				alert.setHeaderText(null);
-  				alert.setContentText("Valor inválido para operacao de débito!");
-
-  				alert.showAndWait();
-          	}        	
+	      	  	double valor = Integer.parseInt(tfValorOperacao.getText());
+	      	  
+	          	if(LogicaOperacoes.getInstance().debito(valor)) {
+	          	  	this.setResultadoOperacoes();
+	          	}else{
+	          		this.abreAlerta("Valor inválido !!", "Valor inválido para operacao de débito!");
+	          	}    
+        	}catch(Exception ex) {
+        		this.abreAlerta("Valor inválido !!", "Valor inválido para operacao de débito!");
+        	}
         });
 
         btnVoltar.setOnAction(e->{
-        	mainStage.setScene(cenaEntrada);
+        	LogicaOperacoes.getInstance().logout();
+        	mainStage.setScene(TelaEntrada.getInstance().getTelaEntrada());
         });
         btnEstatisticas.setOnAction(e->{
-        	mainStage.setScene(this.cenaEstatisticas);
+        	mainStage.setScene(TelaEstatisticas.getInstance().getTelaEstatisticas());
         });
 		
         cenaOperacoes = new Scene(grid);
         return cenaOperacoes;
+	}	
+	
+	private void abreAlerta(String title, String content) {
+		Alert alert = new Alert(AlertType.WARNING);
+		alert.setTitle(title);
+		alert.setHeaderText(null);
+		alert.setContentText(content);
+
+		alert.showAndWait();
 	}
 
 }

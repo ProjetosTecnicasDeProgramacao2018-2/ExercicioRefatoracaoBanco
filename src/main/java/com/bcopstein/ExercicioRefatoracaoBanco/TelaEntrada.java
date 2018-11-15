@@ -27,15 +27,14 @@ import javafx.stage.Stage;
 public class TelaEntrada {
 	private Stage mainStage; 
 	private Scene cenaEntrada; 
-	private Scene cenaEstatisticas;
-	private Map<Integer, Conta> contas; 
-	private List<Operacao> operacoes; 
+	private LogicaOperacoes logicaOperacoes; 
 	
 	private static TelaEntrada instance; //SINGLETON
 
 	private TextField tfContaCorrente;
 
 	private TelaEntrada() {
+		this.logicaOperacoes = LogicaOperacoes.getInstance();
 		//mainStage = anStage;
 	}
 	
@@ -89,29 +88,30 @@ public class TelaEntrada {
 		btnIn.setOnAction(e -> {
 			try {
 				Integer nroConta = Integer.parseInt(tfContaCorrente.getText());
-				// Codigo da camada de negócio
-				Conta conta = contas.get(nroConta);
-				if (conta == null) {
-					throw new NumberFormatException("Conta invalida");
-				}
-				// Transformar o parâmetro "conta" na conta atual na camada de negócio
-				//TelaOperacoes toper = new TelaOperacoes(mainStage, cenaEntrada, new TelaEstatisticas(mainStage, operacoes).getTelaEstatisticas(),conta,operacoes);
-				//Scene scene = toper.getTelaOperacoes();
 				
+				// FAZ LOGIN, SE NAO FOR BEM SUCEDIDO, LANÇA UMA EXCESSÃO
+				if(!LogicaOperacoes.getInstance().login(nroConta)) {
+					this.abreAlerta("Conta inválida !!", "Número de conta inválido!!");
+					return;
+				}
 				// MUDA A CENA PARA A DA TELA DE OPERAÇÕES
 				mainStage.setScene(TelaOperacoes.getInstance().getTelaOperacoes());
 				
-			} catch (NumberFormatException ex) {
-				Alert alert = new Alert(AlertType.WARNING);
-				alert.setTitle("Conta inválida !!");
-				alert.setHeaderText(null);
-				alert.setContentText("Número de conta inválido!!");
-
-				alert.showAndWait();
+			} catch (Exception ex) {
+				this.abreAlerta("Conta inválida !!", "Número de conta inválido!!");
 			}
 		});
 
 		cenaEntrada = new Scene(grid);
 		return cenaEntrada;
+	}
+	
+	private void abreAlerta(String title, String content) {
+		Alert alert = new Alert(AlertType.WARNING);
+		alert.setTitle(title);
+		alert.setHeaderText(null);
+		alert.setContentText(content);
+
+		alert.showAndWait();
 	}
 }
