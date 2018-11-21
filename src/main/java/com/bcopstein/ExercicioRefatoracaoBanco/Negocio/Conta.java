@@ -1,30 +1,28 @@
 package com.bcopstein.ExercicioRefatoracaoBanco.Negocio;
 public class Conta {
-	public final int SILVER = 0;
-	public final int GOLD = 1;
-	public final int PLATINUM = 2;
 	public final int LIM_SILVER_GOLD = 50000;
 	public final int LIM_GOLD_PLATINUM = 200000;
 	public final int LIM_PLATINUM_GOLD = 100000;
 	public final int LIM_GOLD_SILVER = 25000;
-
+	
 	private int numero;
 	private String correntista;
 	private double saldo;
-	private int status;
+	
+	private InterfaceStateConta estado;
 
 	public Conta(int umNumero, String umNome) {
 		numero = umNumero;
 		correntista = umNome;
 		saldo = 0.0;
-		status = SILVER;
+		estado = new StateSilver();
 	}
 	
 	public Conta(int umNumero, String umNome,double umSaldo, int umStatus) {
 		numero = umNumero;
 		correntista = umNome;
 		saldo = umSaldo;
-		status = umStatus;
+		this.setState(umStatus);
 	}
 	
 	public double getSaldo() {
@@ -40,65 +38,52 @@ public class Conta {
 	}
 	
 	public int getStatus() {
-		return status;
+		return this.estado.getStatus();
 	}
 	
-	public String getStrStatus() {
+	
+	// ------------- INICIO FUNÇÕES ADICIONADAS PARA OS STATE ------------- 
+	public void setState(int status) {
 		switch(status) {
-		case 0:  return "Silver";
-		case 1:  return "Gold";
-		case 2:  return "Platinum";
-		default: return "none";
-
+			case StateSilver.STATUS:  
+				this.estado = new StateSilver();
+				break;
+			case StateGold.STATUS:  
+				this.estado = new StateGold();
+				break;
+			case StatePlatinum.STATUS:    
+				this.estado = new StatePlatinum();
+				break;
+			default: 
+				this.estado = null;
+				break;
 		}
+	}
+	
+	public void setSaldo(double saldo) {
+		this.saldo = saldo;
+	}
+	// ------------- FINAL FUNÇÕES ADICIONADAS PARA OS STATE ------------- 
+
+	public String getStrStatus() {
+		return this.estado.getStrStatus();
 	}
 	
 	public double getLimRetiradaDiaria() {
-		//FEITO
-		switch(status) {
-		case 0:  return 10000.0;
-		case 1:  return 100000.0;
-		case 2:  return 500000.0;
-		default: return 0.0;
-		}
+		return this.estado.getLimRetiradaDiaria();
 	}
 	
 	public void deposito(double valor) {
-		if (status == SILVER) {
-			saldo += valor;
-			if (saldo >= LIM_SILVER_GOLD) {
-				status = GOLD;
-			}
-		} else if (status == GOLD) {
-			saldo += valor * 1.01;
-			if (saldo >= LIM_GOLD_PLATINUM) {
-				status = PLATINUM;
-			}
-		} else if (status == PLATINUM) {
-			saldo += valor * 1.025;
-		}
+		estado.deposito(this, valor);
 	}
 
 	public void retirada(double valor) {
-		if (saldo - valor < 0.0) {
-			return;
-		} else {
-			saldo = saldo - valor;
-			if (status == PLATINUM) {
-				if (saldo < LIM_PLATINUM_GOLD) {
-					status = GOLD;
-				}
-			} else if (status == GOLD) {
-				if (saldo < LIM_GOLD_SILVER) {
-					status = SILVER;
-				}
-			}
-		}
+		estado.retirada(this, valor);
 	}
 
 	@Override
 	public String toString() {
-		return "Conta [numero=" + numero + ", correntista=" + correntista + ", saldo=" + saldo + ", status=" + status
+		return "Conta [numero=" + numero + ", correntista=" + correntista + ", saldo=" + saldo + ", status=" + this.estado.getStatus()
 				+ "]";
 	}
 }

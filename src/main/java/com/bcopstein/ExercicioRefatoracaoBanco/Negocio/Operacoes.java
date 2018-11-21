@@ -1,5 +1,6 @@
 package com.bcopstein.ExercicioRefatoracaoBanco.Negocio;
 
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -73,7 +74,7 @@ public class Operacoes {
 		double sum = 0;
 		
 		Integer numConta = Contas.getInstance().getNumeroContaAtual();
-		
+
 		for(Operacao op : this.operacoes) {
 			if(op.getNumeroConta() == numConta) {
 				if(op.getAno() <= ano) {
@@ -83,9 +84,7 @@ public class Operacoes {
 						saldo -= op.getValorOperacao();	
 					}
 					
-					if(op.getMes() == mes && op.getAno() == ano){
-						System.out.println(op);
-						
+					if(op.getMes() == mes && op.getAno() == ano){		
 						sum += saldo;
 						count++;
 					}
@@ -109,48 +108,19 @@ public class Operacoes {
 	} 
 	
 	public boolean credito(double valor) {
-    	  if(!Contas.getInstance().credito(valor)) {
-    		  return false;
-    	  }
+		if(!Contas.getInstance().credito(valor)) {
+    		return false;
+    	}
     	  
-    	  GregorianCalendar date = new GregorianCalendar();        	  
-    	  
-    	  Operacao op = new Operacao(
-    			  date.get(GregorianCalendar.DAY_OF_MONTH),
-    			  ((int) date.get(GregorianCalendar.MONTH)+1),
-    			  date.get(GregorianCalendar.YEAR),
-    			  date.get(GregorianCalendar.HOUR),
-    			  date.get(GregorianCalendar.MINUTE),
-    			  date.get(GregorianCalendar.SECOND),
-    			  Contas.getInstance().getNumeroContaAtual(),
-    			  Contas.getInstance().getStatusContaAtual(),
-    			  valor,
-    			  0);
-          operacoes.add(op);
-          
-          return this.operacoes.contains(op);
+    	return operacoes.add(Operacao.criaOperacaoCredito(valor));
 	}
 	
 	public boolean debito(double valor) {
-  	  if(!Contas.getInstance().debito(valor)) {
-  		  return false;
-  	  }
-  	  
-  	  GregorianCalendar date = new GregorianCalendar();        	  
-  	  
-  	  Operacao op = new Operacao(
-  			  date.get(GregorianCalendar.DAY_OF_MONTH),
-  			  ((int) date.get(GregorianCalendar.MONTH)+1),
-  			  date.get(GregorianCalendar.YEAR),
-  			  date.get(GregorianCalendar.HOUR),
-  			  date.get(GregorianCalendar.MINUTE),
-  			  date.get(GregorianCalendar.SECOND),
-  			  Contas.getInstance().getNumeroContaAtual(),
-  			  Contas.getInstance().getStatusContaAtual(),
-  			  valor,
-  			  1);
-        operacoes.add(op);
-        
-        return this.operacoes.contains(op);
+		if(!Contas.getInstance().debito(valor)) {
+			return false;
+		}
+        return operacoes.add(Operacao.criaOperacaoDebito(valor));
 	}
+	
+	
 }

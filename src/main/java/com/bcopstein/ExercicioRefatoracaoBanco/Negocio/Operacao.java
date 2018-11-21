@@ -1,8 +1,10 @@
 package com.bcopstein.ExercicioRefatoracaoBanco.Negocio;
 
+import java.util.GregorianCalendar;
+
 public class Operacao {
-	public final int CREDITO = 0;
-	public final int DEBITO = 1;
+	public final static int CREDITO = 0;
+	public final static int DEBITO = 1;
 
 	private int dia;
 	private int mes;
@@ -15,6 +17,7 @@ public class Operacao {
 	private double valorOperacao;
 	private int tipoOperacao;
 
+	// TIVE QUE DEIXAR PUBLIC POR CAUSA QUE A CLASSE Persistencia USA O CONSTRUTOR
 	public Operacao(int dia, int mes, int ano, int hora, int minuto, int segundo, int numeroConta, int statusConta,
 			double valorOperacao, int tipoOperacao) {
 		super();
@@ -28,6 +31,38 @@ public class Operacao {
 		this.statusConta = statusConta;
 		this.valorOperacao = valorOperacao;
 		this.tipoOperacao = tipoOperacao;
+	}
+
+	public static Operacao criaOperacaoDebito(double valor) {
+		GregorianCalendar date = new GregorianCalendar();  
+		
+		return new Operacao(
+	  			  date.get(GregorianCalendar.DAY_OF_MONTH),
+	  			  ((int) date.get(GregorianCalendar.MONTH)+1),
+	  			  date.get(GregorianCalendar.YEAR),
+	  			  date.get(GregorianCalendar.HOUR),
+	  			  date.get(GregorianCalendar.MINUTE),
+	  			  date.get(GregorianCalendar.SECOND),
+	  			  Contas.getInstance().getNumeroContaAtual(),
+	  			  Contas.getInstance().getStatusContaAtual(),
+	  			  valor,
+	  			  Operacao.CREDITO);
+	}
+	
+	public static Operacao criaOperacaoCredito(double valor) {
+		GregorianCalendar date = new GregorianCalendar();  
+		
+		return new Operacao(
+	  			  date.get(GregorianCalendar.DAY_OF_MONTH),
+	  			  ((int) date.get(GregorianCalendar.MONTH)+1),
+	  			  date.get(GregorianCalendar.YEAR),
+	  			  date.get(GregorianCalendar.HOUR),
+	  			  date.get(GregorianCalendar.MINUTE),
+	  			  date.get(GregorianCalendar.SECOND),
+	  			  Contas.getInstance().getNumeroContaAtual(),
+	  			  Contas.getInstance().getStatusContaAtual(),
+	  			  valor,
+	  			  Operacao.DEBITO);
 	}
 
 	public int getDia() {

@@ -28,11 +28,7 @@ public class Contas {
 		
 		this.contaAtual = this.contas.get(numConta);
 		
-		//SE NÃO ENCONTRAR A CONTA
-		if(!this.existeContaAtual()) {
-			return false;
-		}
-		return true; //SE DER TUDO CERTO, RETORNA true;
+		return this.existeContaAtual(); //SE DER TUDO CERTO, RETORNA true;
 	}
 	
 	public void logout() {

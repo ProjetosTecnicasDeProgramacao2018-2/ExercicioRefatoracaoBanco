@@ -10,19 +10,10 @@ public class LogicaOperacoes {
 	
 	/*
 	 	-------------- CONTEUDO DESTA CLASSE -------------- 
-	 	Definir conta em uso
-		Operaçao de crédito
-		Operacao de débito
-		Solicita extrato
-		Solicita saldo
-		Solicita saldo medio
-		Total créditos
-		Total débitos
 		VALIDACOES: criar uma classe (singleton) para validacoes dos limites diários de saques.
 	*/
 	
 	private LogicaOperacoes() {
-		// TODO Auto-generated constructor stub
 	}
 	
 	// FUNÇÃO CHAMADA QUANDO É ENCERRADO O SISTEMA

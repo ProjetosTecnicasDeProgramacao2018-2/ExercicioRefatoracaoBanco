@@ -73,15 +73,15 @@ Isso irá permitir que a dependencia da camada de
 apresentacao para a de lógica se restrinja a apenas
 uma classe.
 
-3) Adoção do padrão StatePattern
-Cria a interface StateConta
-Altera a classe conta para explorar o padrão StatePattern. 
-Explora classes aninhadas.
+3) Adoção do padrão StatePattern<br />
+Cria a interface StateConta<br />
+Altera a classe conta para explorar o padrão StatePattern.<br /> 
+Explora classes aninhadas.<br />
 
-4) Adoção do padrão Factory e padrao Factory Method
-** para a criação dos StatePattern (Factory)
-** para a criacao das operacoes (Factory Methods especificos para deposito e retirada)
+4) Adoção do padrão Factory e padrao Factory Method<br />
+** para a criação dos StatePattern (Factory)<br />
+** para a criacao das operacoes (Factory Methods especificos para deposito e retirada)<br />
 
-5) Adoção do padrão Observer - funcionalidade adicional
-Criar um dialogo modeless que mantém visível o nome do correntista e o saldo médio com o maior saldo médio da agência. Adotar observer para ser notificado pela persistencia toda vez que esta informação variar.
+5) Adoção do padrão Observer - funcionalidade adicional<br />
+Criar um dialogo modeless que mantém visível o nome do correntista e o saldo médio com o maior saldo médio da agência. Adotar observer para ser notificado pela persistencia toda vez que esta informação variar.<br />
 
