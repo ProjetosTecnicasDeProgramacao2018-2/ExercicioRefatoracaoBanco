@@ -34,6 +34,10 @@ public class Operacao {
 	}
 
 	public static Operacao criaOperacaoDebito(double valor) {
+		if(valor <= 0) {
+			return null;
+		}
+		
 		GregorianCalendar date = new GregorianCalendar();  
 		
 		return new Operacao(
@@ -50,6 +54,10 @@ public class Operacao {
 	}
 	
 	public static Operacao criaOperacaoCredito(double valor) {
+		if(valor <= 0) {
+			return null;
+		}
+		
 		GregorianCalendar date = new GregorianCalendar();  
 		
 		return new Operacao(
